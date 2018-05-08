@@ -239,7 +239,7 @@ contract Bondage is Destructible {
         // This also checks if oracle is registered w/an initialized curve
         (numZap, numDots) = calcBondRate(oracleAddress, endpoint, numZap);
 
-        if (!stor.isProviderInitialized(holderAddress, oracleAddress)) {            
+        if (!stor.isProviderInitialized(holderAddress, oracleAddress)) {
             stor.setProviderInitialized(holderAddress, oracleAddress);
             stor.addHolderOracle(holderAddress, oracleAddress);
         }
@@ -247,7 +247,7 @@ contract Bondage is Destructible {
         // User must have approved contract to transfer working ZAP
         require(token.transferFrom(msg.sender, this, numZap * decimals));
 
-        stor.updateBondValue(holderAddress, oracleAddress, endpoint, numDots, "add");        
+        stor.updateBondValue(holderAddress, oracleAddress, endpoint, numDots, "add");
         stor.updateTotalIssued(oracleAddress, endpoint, numDots, "add");
         stor.updateTotalBound(oracleAddress, endpoint, numZap, "add");
 

@@ -29,8 +29,9 @@ contract Dispatch is Destructible {
 
     address public storageAddress;
 
-    function Dispatch(address storageAddress, address bondageAddress) public {
-        stor = DispatchStorage(storageAddress);
+    function Dispatch(address _storageAddress, address bondageAddress) public {
+        storageAddress = _storageAddress;
+        stor = DispatchStorage(_storageAddress);
         bondage = BondageInterface(bondageAddress);
     }
 
@@ -45,14 +46,16 @@ contract Dispatch is Destructible {
         external
         returns (uint256 id)
     {
-        uint256 dots = bondage.getDots(msg.sender, provider, endpoint);
+        address sub = msg.sender;
+        uint256 dots = bondage.getBoundDots(sub, provider, endpoint);
 
         if(dots >= 1) {
             //enough dots
-            bondage.escrowDots(msg.sender, provider, endpoint, 1);
-            id = uint256(keccak256(block.number, now, userQuery, msg.sender));
-            stor.createQuery(id, provider, msg.sender, endpoint);
-            Incoming(id, provider, msg.sender, userQuery, endpoint, endpointParams);
+            bondage.escrowDots(sub, provider, endpoint, 1);
+            id = uint256(keccak256(block.number, now, userQuery, sub));
+            storageAddress.call(bytes4(keccak256("createQuery(uint256,address,address,bytes32)")), id, provider, sub, endpoint);
+            //stor.createQuery(id, provider, sub, endpoint);
+            Incoming(id, provider, sub, userQuery, endpoint, endpointParams);
         }
     }
 

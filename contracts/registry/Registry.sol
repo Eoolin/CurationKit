@@ -47,7 +47,7 @@ contract Registry is Destructible {
         require(getProviderPublicKey(msg.sender) == 0);
         stor.createOracle(msg.sender, publicKey, title);
         if(endpoint != 0) setEndpointParams(endpoint, endpointParams);
-        stor.addOracle(msg.sender);
+        //stor.addOracle(msg.sender);
         NewProvider(msg.sender, title, endpoint);
         return true;
     }
