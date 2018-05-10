@@ -53,8 +53,7 @@ contract Dispatch is Destructible {
             //enough dots
             bondage.escrowDots(sub, provider, endpoint, 1);
             id = uint256(keccak256(block.number, now, userQuery, sub));
-            storageAddress.call(bytes4(keccak256("createQuery(uint256,address,address,bytes32)")), id, provider, sub, endpoint);
-            //stor.createQuery(id, provider, sub, endpoint);
+            stor.createQuery(id, provider, sub, endpoint);
             Incoming(id, provider, sub, userQuery, endpoint, endpointParams);
         }
     }
