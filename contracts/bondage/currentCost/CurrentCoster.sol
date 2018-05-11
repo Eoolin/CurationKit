@@ -3,11 +3,11 @@ pragma solidity ^0.4.19;
 import "../../lib/Destructible.sol";
 import "../../registry/RegistryInterface.sol";
 
-contract CurrentCost is Destructible {
+contract CurrentCoster is Destructible {
 
     RegistryInterface registry;
 
-    function CurrentCost(address registryAddress) public {
+    function CurrentCoster(address registryAddress) public {
        registry = RegistryInterface(registryAddress);
     }
 

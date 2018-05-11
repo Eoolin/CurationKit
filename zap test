@@ -1,0 +1,44 @@
+eth = require('ethjs');
+BigNumber = require('bignumber.js');
+providerTitle = eth.fromAscii("test");
+providerPublicKey = 111;
+ZapCurveType = 'ZapCurveLinear';
+curveStart = 1;
+curveMultiplier = 1;
+param1 = new String("p1");
+param2 = new String("p2");
+params = [eth.fromAscii(param1.valueOf()), eth.fromAscii(param2.valueOf())];
+specifier = "test-linear-specifier";
+oracleEndpoint = eth.fromAscii(specifier.valueOf());
+gasTransaction = eth.toBN(3000000);
+tokensForOwner = new BigNumber("1e30");
+tokensForOracle = new BigNumber('1e24');
+allocateAccount = 300000;
+
+r = Registry.at(Registry.address);
+r.initiateProvider(providerPublicKey, providerTitle, oracleEndpoint, params, { from: web3.eth.accounts[0], gas:6000000});
+
+r.initiateProviderCurve(oracleEndpoint,1,1,1,{from:web3.eth.accounts[0]});
+
+t = ZapToken.at(ZapToken.address)
+t.allocate(web3.eth.accounts[0], web3.toBigNumber(10).pow(web3.toBigNumber(30)));
+t.balanceOf(web3.eth.accounts[0]).then(n=>{console.log(n.toNumber())});
+
+b = Bondage.at(Bondage.address)
+
+t.decimals().then(i=>{num=i});
+a1 = web3.toBigNumber(1000).pow(num)
+
+t.approve(b.address, a1);
+
+r.getNextProvider(0,{from:web3.eth.accounts[0]}).then(i=>{np=i});
+
+b.bond(np[1],oracleEndpoint,1,{from:web3.eth.accounts[0]});
+
+b.setCurrentCostAddress(CurrentCoster.address);
+
+b.bond(np[1],oracleEndpoint,1,{from:web3.eth.accounts[0]});
+
+b.setCurrentCostAddress(CurrentCost.address);
+
+b.bond(np[1],oracleEndpoint,1,{from:web3.eth.accounts[0]});
