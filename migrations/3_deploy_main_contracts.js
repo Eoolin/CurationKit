@@ -8,6 +8,7 @@ var DispatchStorage = artifacts.require("./DispatchStorage.sol");
 var Dispatch = artifacts.require("./Dispatch.sol");
 var ZapToken = artifacts.require("./ZapToken.sol");
 var CurrentCost = artifacts.require("./CurrentCost.sol");
+var CurrentCost2 = artifacts.require("./CurrentCost2.sol");
 
 module.exports = function(deployer) {
   deployer.deploy([RegistryStorage, BondageStorage, ArbiterStorage, DispatchStorage])
@@ -16,6 +17,9 @@ module.exports = function(deployer) {
   })
   .then (() => {
     return deployer.deploy(CurrentCost, Registry.address);
+  })
+  .then (() => {
+    return deployer.deploy(CurrentCost2, Registry.address);
   })
   .then (() => {
     return deployer.deploy(Bondage, BondageStorage.address, ZapToken.address, CurrentCost.address);
